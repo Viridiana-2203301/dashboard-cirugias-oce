@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="OCE: Observatorio de Cirug&iacute;as Est&eacute;ticas. An&aacute;lisis de precios, procedimientos, regiones y tendencias.">
+  <title>OCE | Observatorio de Cirug&iacute;as Est&eacute;ticas</title>
+  <link rel="icon" href="./assets/icons/logo.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+  <link rel="stylesheet" href="./css/styles.css"><link rel="stylesheet" href="./css/responsive.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/papaparse@5.5.3/papaparse.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
+  <script type="module" src="./js/app.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Saltar al contenido</a>
+  <aside class="sidebar" id="sidebar">
+    <a class="brand" href="#overview"><img src="./assets/icons/logo.svg" alt="" width="44" height="44"><span>OCE <small>OBSERVATORIO DE CIRUG&Iacute;AS EST&Eacute;TICAS</small></span></a>
+    <div class="nav-caption">ESPACIO DE ANÁLISIS</div>
+    <nav aria-label="Navegación principal">
+      <a class="active" href="#overview" aria-current="page"><i class="fa-solid fa-chart-pie" aria-hidden="true"></i>Vista general</a>
+      <a href="#prices"><i class="fa-solid fa-coins" aria-hidden="true"></i>Comparación de precios</a>
+      <a href="#procedures"><i class="fa-solid fa-notes-medical" aria-hidden="true"></i>Procedimientos</a>
+      <a href="#cities"><i class="fa-solid fa-location-dot" aria-hidden="true"></i>Ciudades</a>
+      <a href="#surgeons"><i class="fa-solid fa-user-doctor" aria-hidden="true"></i>Cirujanos</a>
+      <a href="#google-trends"><i class="fa-solid fa-arrow-trend-up" aria-hidden="true"></i>Google Trends</a>
+      <a href="#about"><i class="fa-solid fa-circle-info" aria-hidden="true"></i>Acerca de los datos</a>
+    </nav>
+    <div class="sidebar-footer"><span class="hospital-cross">+</span><strong>OCE</strong><span>Observatorio de Cirug&iacute;as Est&eacute;ticas</span><hr><span>Precios, procedimientos y tendencias</span></div>
+  </aside>
+  <main id="main">
+    <div class="topbar"><button class="menu-toggle" id="menu-toggle" aria-label="Abrir menú" aria-controls="sidebar" aria-expanded="false"><i class="fa-solid fa-bars" aria-hidden="true"></i></button><span>INVESTIGACIÓN &amp; ANÁLISIS</span><span class="badge"><span class="status-dot"></span>Datos de cirugia_estetica.csv</span></div>
+    <header id="overview"><div><p class="eyebrow">UNA MIRADA A LA EVOLUCIÓN DEL SECTOR</p><h1>Observatorio de Cirug&iacute;as Est&eacute;ticas</h1><p>Precios y registros por país, procedimiento y año</p></div><button id="reset" class="button" disabled><i class="fa-solid fa-arrow-rotate-left" aria-hidden="true"></i>Restablecer filtros</button></header>
+    <section id="global-filters" class="filters card" aria-label="Filtros de datos"><div class="filter-heading"><i class="fa-solid fa-sliders" aria-hidden="true"></i><strong>Explora los datos</strong><span>Los resultados se actualizan al seleccionar</span></div><div class="filter-grid">
+      <label>Año<select data-filter="Year" disabled><option value="">Todos</option></select></label>
+      <label>País<select data-filter="Country" disabled><option value="">Todos</option></select></label>
+      <label>Procedimiento<select data-filter="Procedure" disabled><option value="">Todos</option></select></label>
+    </div></section>
+    <div id="status" class="notice" role="status" aria-live="polite">Cargando datos...</div>
+    <div id="view-description" class="view-description" role="note" aria-live="polite"></div>
+    <section data-tab-view="overview" aria-labelledby="summary-title"><div class="section-heading"><h2 id="summary-title">Panorama general</h2><span id="scope">Indicadores del conjunto filtrado</span></div><div id="kpis" class="kpi-grid"></div></section>
+    <section id="analysis-charts" class="chart-grid" aria-label="Gráficas de análisis">
+      <article id="price-trend-card" data-tab-view="prices" class="card chart-card wide"><div class="card-heading"><div><span class="eyebrow">EVOLUCIÓN ANUAL</span><h2>El precio a través del tiempo</h2><p>Promedio por país · USD</p></div><span class="tag">2021â€“2024</span></div><div class="chart-wrap"><canvas id="trend-chart" role="img" aria-label="Evolución del precio promedio por año y país"></canvas><p class="chart-empty" hidden>Sin datos para esta selección</p></div></article>
+      <article id="country-chart-card" data-tab-view="about" class="card chart-card"><div class="card-heading"><div><span class="eyebrow">COMPOSICIÓN DE LA MUESTRA</span><h2>Registros por país</h2><p>Participación en los registros filtrados</p></div></div><div class="chart-wrap"><canvas id="country-chart" role="img" aria-label="Distribución de registros por país"></canvas><p class="chart-empty" hidden>Sin datos para esta selección</p></div></article>
+      <article id="prices" data-tab-view="prices procedures" class="card chart-card wide"><div class="card-heading"><div><span class="eyebrow">COMPARACIÓN DE PRECIOS</span><h2>Una perspectiva por procedimiento</h2><p>Precio promedio · México y Estados Unidos</p></div></div><div class="chart-wrap"><canvas id="price-chart" role="img" aria-label="Precios promedio de los seis procedimientos por país"></canvas><p class="chart-empty" hidden>Sin datos para esta selección</p></div></article>
+      <article id="procedures" data-tab-view="procedures" class="card chart-card"><div class="card-heading"><div><span class="eyebrow">PROCEDIMIENTOS</span><h2>Distribución de registros</h2><p>Frecuencia por procedimiento</p></div></div><div class="chart-wrap"><canvas id="procedure-chart" role="img" aria-label="Cantidad de registros por procedimiento"></canvas><p class="chart-empty" hidden>Sin datos para esta selección</p></div></article>
+      <article id="cities" data-tab-view="cities" class="card chart-card half"><div class="card-heading"><div><span class="eyebrow">CIUDADES Y ESTADOS</span><h2>Ciudades con mayor precio</h2><p>Las 10 principales · Precio promedio en USD</p></div></div><div class="chart-wrap tall"><canvas id="city-chart" role="img" aria-label="Diez ciudades con mayor precio promedio"></canvas><p class="chart-empty" hidden>Sin datos para esta selección</p></div></article>
+      <article id="surgeons" data-tab-view="surgeons" class="card chart-card half"><div class="card-heading"><div><span class="eyebrow">CIRUJANOS REGISTRADOS</span><h2>Promedio por ciudad</h2><p>Las 10 principales · No representa personas únicas</p></div></div><div class="chart-wrap tall"><canvas id="surgeon-chart" role="img" aria-label="Diez ciudades con mayor promedio de cirujanos registrados"></canvas><p class="chart-empty" hidden>Sin datos para esta selección</p></div></article>
+    </section>
+    <section id="observations-table" data-tab-view="about" class="card table-card" aria-labelledby="table-title"><div class="card-heading"><div><span class="eyebrow">EXPLORA EL DETALLE</span><h2 id="table-title">Tabla de observaciones</h2><p>Datos del archivo fuente · Precios expresados en USD</p></div><label class="search"><i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i><input id="search" type="search" placeholder="Buscar en la tablaâ€¦" aria-label="Buscar texto en la tabla"></label></div><div class="table-scroll" tabindex="0" role="region" aria-label="Tabla desplazable"><table><thead><tr>
+      <th aria-sort="none"><button data-sort="Country">País â†•</button></th><th aria-sort="none"><button data-sort="City">Ciudad â†•</button></th><th>Año</th><th aria-sort="none"><button data-sort="Procedure">Procedimiento â†•</button></th><th aria-sort="none"><button data-sort="Record Count">Observaciones agrupadas â†•</button></th><th>Cirujanos promedio</th><th>Rango de precios del grupo</th><th aria-sort="none"><button data-sort="Average Price">Precio promedio â†•</button></th>
+    </tr></thead><tbody id="table-body"></tbody></table></div><div class="pagination"><span id="table-count">Sin registros</span><div><button id="previous" aria-label="Página anterior">â†</button><span id="page-label">Página 0 de 0</span><button id="next" aria-label="Página siguiente">â†’</button></div></div></section>
+    <section id="google-trends" data-tab-view="google-trends" class="trends-section" aria-labelledby="trends-heading">
+      <div class="section-heading"><div><span class="eyebrow">INTER&Eacute;S DE B&Uacute;SQUEDA &middot; GOOGLE TRENDS</span><h2 id="trends-heading">Inter&eacute;s por regi&oacute;n</h2><p>Explora t&eacute;rminos por regi&oacute;n en M&eacute;xico y Estados Unidos</p></div><span>CSV exportados de Google Trends</span></div>
+      <aside class="trends-explainer card"><h3>&iquest;Qu&eacute; significa el inter&eacute;s de b&uacute;squeda?</h3><p>Es una escala relativa de 0 a 100 dentro del t&eacute;rmino, pa&iacute;s y periodo elegidos. 100 se&ntilde;ala el punto o regi&oacute;n de mayor popularidad relativa; los dem&aacute;s valores se ajustan a esa referencia. Un valor de 50 no significa necesariamente la mitad de b&uacute;squedas.</p><p>Elige un procedimiento y un pa&iacute;s para ver d&oacute;nde despierta m&aacute;s inter&eacute;s. Sirve para detectar diferencias regionales y orientar preguntas de investigaci&oacute;n o comunicaci&oacute;n; no mide b&uacute;squedas exactas, pacientes ni cirug&iacute;as realizadas. Compara resultados solo dentro de la misma selecci&oacute;n y el periodo cubierto por el CSV.</p></aside>
+      <div class="trends-controls card"><label>T&eacute;rmino<select id="trends-term"><option value="">Detectando t&eacute;rminos...</option></select></label><label>Pa&iacute;s<select id="trends-country"><option value="">Detectando pa&iacute;ses...</option></select></label><p>La gr&aacute;fica, la tabla y el mapa muestran solo el pa&iacute;s y el procedimiento seleccionados. Se usa el periodo agregado del CSV.</p></div>
+      <div class="trends-grid">
+        <article class="card trends-chart-card"><div class="card-heading"><div><span class="eyebrow">RANKING REGIONAL</span><h3>Regiones con mayor inter&eacute;s</h3><p>Top 20 para el t&eacute;rmino seleccionado</p></div></div><div class="chart-wrap trends-chart-wrap"><canvas id="trends-chart" role="img" aria-label="Top 20 de inter&eacute;s de b&uacute;squeda por regi&oacute;n"></canvas><p class="chart-empty" hidden>Sin datos para esta selecci&oacute;n</p></div></article>
+        <article class="card trends-table-card"><div class="card-heading"><div><span class="eyebrow">DATOS POR ESTADO</span><h3>Inter&eacute;s de b&uacute;squeda</h3><p id="trends-count">Esperando archivos...</p></div></div><div class="table-scroll"><table><thead><tr><th>#</th><th>Regi&oacute;n</th><th>Pa&iacute;s</th><th>Inter&eacute;s</th><th>Gr&aacute;fico</th></tr></thead><tbody id="trends-body"></tbody></table></div></article>
+      </div>
+      <article class="card trends-map-card"><div class="card-heading"><div><span class="eyebrow">MAPA DE CALOR POR ESTADO</span><h3>Distribuci&oacute;n geogr&aacute;fica</h3><p>El color muestra la intensidad relativa del procedimiento seleccionado; al pasar por un estado aparece solo su &iacute;ndice.</p></div><span class="tag">Escala relativa: menor a mayor</span></div><div id="trends-map" class="trends-map" aria-live="polite"></div></article>
+      <p id="trends-status" class="notice" role="status" aria-live="polite">Cargando archivos de Trends...</p><p class="trends-methodology">Google Trends muestra inter&eacute;s relativo de b&uacute;squeda; no equivale a volumen absoluto, pacientes ni procedimientos realizados.</p>
+    </section>
+    <section id="about" data-tab-view="about" class="card about"><span class="eyebrow">TRANSPARENCIA Y METODOLOGÍA</span><h2>Acerca de los datos</h2><p class="data-warning">La visualización parte de cirugia_estetica.csv y usa un archivo compacto agrupado por año, país, ciudad y procedimiento. Conserva los conteos, sumas, promedios, mínimos y máximos necesarios para reproducir los indicadores y gráficos sobre las 932,539 observaciones originales.</p><p>La tabla presenta esos grupos resumidos, no cada fila original. Los rangos muestran los límites observados en cada grupo. Los resultados son descriptivos; las comparaciones entre países pueden reflejar mezclas distintas de procedimientos.</p><div id="metadata" class="metadata"></div><details><summary>Validación del archivo compacto</summary><ul id="validation"></ul></details></section>
+    <footer>OCE &middot; Observatorio de Cirug&iacute;as Est&eacute;ticas <span>Dashboard acad&eacute;mico / M&eacute;xico &amp; Estados Unidos</span></footer>
+  </main>
+  <script type="module">import { setupTrends } from './js/trends.js'; if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', setupTrends, { once: true }); else setupTrends();</script>
+</body></html>
+
+
+
+
+
+
